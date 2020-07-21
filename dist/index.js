@@ -1404,6 +1404,7 @@ const run = __webpack_require__(861);
  */
 async function deploy() {
   const cfApp = getInput('cf-app');
+  const deployDir = getInput('deploy-dir');
   try {
     const manifestFile = getInput('cf-manifest');
     await run('ibmcloud cf add-plugin-repo CF-Community https://plugins.cloudfoundry.org', execOptions);
@@ -1411,7 +1412,10 @@ async function deploy() {
     await exec(
       'ibmcloud',
       ['cf', 'blue-green-deploy', cfApp, ...(!manifestFile ? [] : ['-f', manifestFile]), '--delete-old-apps'],
-      execOptions
+      {
+        ...execOptions,
+        cwd: deployDir,
+      }
     );
   } catch (error) {
     setFailed(`Deploying ${cfApp} to IBM Cloud failed: ${error.stack}`);

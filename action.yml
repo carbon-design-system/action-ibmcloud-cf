@@ -19,6 +19,9 @@ inputs:
   cf-manifest:
     description: 'CloudFoundry manifest file'
     required: false
+  deploy-dir:
+    description: 'The root directory to deploy'
+    required: false
 runs:
   using: node12
   main: dist/index.js

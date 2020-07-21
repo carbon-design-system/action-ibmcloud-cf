@@ -63,6 +63,27 @@ describe('Deploying a CF app to IBM Cloud', () => {
     );
   });
 
+  it('runs the right set of commands with deploy directory specified', async () => {
+    getInput.mockImplementation((name) => ({ 'cf-app': 'cf-app-foo', 'deploy-dir': 'deploy-dir-foo' }[name]));
+    await deploy();
+    expect(exec).toHaveBeenNthCalledWith(
+      1,
+      'ibmcloud',
+      ['cf', 'add-plugin-repo', 'CF-Community', 'https://plugins.cloudfoundry.org'],
+      execOptions
+    );
+    expect(exec).toHaveBeenNthCalledWith(
+      2,
+      'ibmcloud',
+      ['cf', 'install-plugin', 'blue-green-deploy', '-f', '-r', 'CF-Community'],
+      execOptions
+    );
+    expect(exec).toHaveBeenNthCalledWith(3, 'ibmcloud', ['cf', 'blue-green-deploy', 'cf-app-foo', '--delete-old-apps'], {
+      ...execOptions,
+      cwd: 'deploy-dir-foo',
+    });
+  });
+
   it('handles error executing command', async () => {
     exec.mockReturnValue(Promise.reject(new Error('exec-command-error')));
     let caught;
