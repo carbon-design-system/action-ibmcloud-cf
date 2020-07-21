@@ -1,0 +1,25 @@
+name: Deploy to IBM Cloud
+description: Deploy to IBM Cloud
+inputs:
+  cloud-api-key:
+    description: 'IBM Cloud API key'
+    required: true
+  cf-org:
+    description: 'CloudFoundry org'
+    required: true
+  cf-space:
+    description: 'CloudFoundry space'
+    required: true
+  cf-region:
+    description: 'CloudFoundry region'
+    required: false
+  cf-app:
+    description: 'CloudFoundry application name'
+    required: true
+  cf-manifest:
+    description: 'CloudFoundry manifest file'
+    required: false
+runs:
+  using: node12
+  main: dist/index.js
+  post: dist/logout.js
