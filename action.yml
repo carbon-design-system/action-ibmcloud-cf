@@ -28,6 +28,9 @@ inputs:
   deploy-dir:
     description: 'The root directory to deploy'
     required: false
+  use-bluegreendeploy:
+    description: 'Flag to use blue-green-deploy'
+    required: false
 runs:
   using: node12
   main: dist/index.js

@@ -29,28 +29,10 @@ describe('Installing IBM Cloud CLI', () => {
     await login();
     expect(exec).toHaveBeenCalledWith(
       'ibmcloud',
-      [
-        'login',
-        '-a',
-        'https://cloud.ibm.com',
-        '-u',
-        'apikey',
-        '-p',
-        'cloud-api-key-foo',
-      ],
+      ['login', '-a', 'https://cloud.ibm.com', '-u', 'apikey', '-p', 'cloud-api-key-foo'],
       execOptions
     );
-    expect(exec).toHaveBeenCalledWith(
-      'ibmcloud',
-      [
-        'target',
-        '-o',
-        'cf-org-foo',
-        '-s',
-        'cf-space-foo',
-      ],
-      execOptions
-    );
+    expect(exec).toHaveBeenCalledWith('ibmcloud', ['target', '-o', 'cf-org-foo', '-s', 'cf-space-foo'], execOptions);
   });
 
   it('runs the right set of commands with CF region specified', async () => {
@@ -62,7 +44,7 @@ describe('Installing IBM Cloud CLI', () => {
           'cf-space': 'cf-space-foo',
           'cf-region': 'cf-region-foo',
           'cf-group': 'cf-group-foo',
-          'cf-api': 'https://cf-api-foo.com'
+          'cf-api': 'https://cf-api-foo.com',
         }[name])
     );
     await login();
@@ -85,15 +67,7 @@ describe('Installing IBM Cloud CLI', () => {
     );
     expect(exec).toHaveBeenCalledWith(
       'ibmcloud',
-      [
-        'target',
-        '-o',
-        'cf-org-foo',
-        '-s',
-        'cf-space-foo',
-        '--cf-api',
-        'https://cf-api-foo.com',
-      ],
+      ['target', '-o', 'cf-org-foo', '-s', 'cf-space-foo', '--cf-api', 'https://cf-api-foo.com'],
       execOptions
     );
   });

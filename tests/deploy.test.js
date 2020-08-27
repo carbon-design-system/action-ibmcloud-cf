@@ -18,7 +18,13 @@ jest.mock('@actions/tool-cache');
 
 describe('Deploying a CF app to IBM Cloud', () => {
   it('runs the right set of commands', async () => {
-    getInput.mockImplementation((name) => ({ 'cf-app': 'cf-app-foo' }[name]));
+    getInput.mockImplementation(
+      (name) =>
+        ({
+          'cf-app': 'cf-app-foo',
+          'use-bluegreendeploy': 'true',
+        }[name])
+    );
     await deploy();
     expect(exec).toHaveBeenNthCalledWith(
       1,
@@ -41,7 +47,14 @@ describe('Deploying a CF app to IBM Cloud', () => {
   });
 
   it('runs the right set of commands with CF manifest specified', async () => {
-    getInput.mockImplementation((name) => ({ 'cf-app': 'cf-app-foo', 'cf-manifest': 'cf-manifest-foo' }[name]));
+    getInput.mockImplementation(
+      (name) =>
+        ({
+          'cf-app': 'cf-app-foo',
+          'cf-manifest': 'cf-manifest-foo',
+          'use-bluegreendeploy': 'true',
+        }[name])
+    );
     await deploy();
     expect(exec).toHaveBeenNthCalledWith(
       1,
@@ -64,7 +77,14 @@ describe('Deploying a CF app to IBM Cloud', () => {
   });
 
   it('runs the right set of commands with deploy directory specified', async () => {
-    getInput.mockImplementation((name) => ({ 'cf-app': 'cf-app-foo', 'deploy-dir': 'deploy-dir-foo' }[name]));
+    getInput.mockImplementation(
+      (name) =>
+        ({
+          'cf-app': 'cf-app-foo',
+          'deploy-dir': 'deploy-dir-foo',
+          'use-bluegreendeploy': 'true',
+        }[name])
+    );
     await deploy();
     expect(exec).toHaveBeenNthCalledWith(
       1,
@@ -82,6 +102,17 @@ describe('Deploying a CF app to IBM Cloud', () => {
       ...execOptions,
       cwd: 'deploy-dir-foo',
     });
+  });
+
+  it('runs the regular cf push', async () => {
+    getInput.mockImplementation(
+      (name) =>
+        ({
+          'cf-app': 'cf-app-foo',
+        }[name])
+    );
+    await deploy();
+    expect(exec).toHaveBeenNthCalledWith(1, 'ibmcloud', ['cf', 'push', 'cf-app-foo'], execOptions);
   });
 
   it('handles error executing command', async () => {
