@@ -24,24 +24,43 @@ describe('Installing IBM Cloud CLI', () => {
           'cloud-api-key': 'cloud-api-key-foo',
           'cf-org': 'cf-org-foo',
           'cf-space': 'cf-space-foo',
+          'cf-region': 'cf-region-foo',
+          'cf-api': 'https://api.us-south.cf.cloud.ibm.com',
         }[name])
     );
     await login();
-    expect(exec).toHaveBeenCalledWith(
+    expect(exec).toHaveBeenNthCalledWith(
+      1,
       'ibmcloud',
-      [
-        'login',
-        '-a',
-        'https://cloud.ibm.com',
-        '-u',
-        'apikey',
-        '-p',
-        'cloud-api-key-foo',
-        '-o',
-        'cf-org-foo',
-        '-s',
-        'cf-space-foo',
-      ],
+      ['login', '-a', 'https://api.us-south.cf.cloud.ibm.com', '-u', 'apikey', '-p', 'cloud-api-key-foo', '-r', 'cf-region-foo'],
+      execOptions
+    );
+    expect(exec).toHaveBeenNthCalledWith(2, 'ibmcloud', ['target', '-o', 'cf-org-foo', '-s', 'cf-space-foo'], execOptions);
+  });
+
+  it('runs the right set of commands with CF group specified', async () => {
+    getInput.mockImplementation(
+      (name) =>
+        ({
+          'cloud-api-key': 'cloud-api-key-foo',
+          'cf-org': 'cf-org-foo',
+          'cf-space': 'cf-space-foo',
+          'cf-group': 'cf-group-foo',
+          'cf-region': 'cf-region-foo',
+          'cf-api': 'https://api.us-south.cf.cloud.ibm.com',
+        }[name])
+    );
+    await login();
+    expect(exec).toHaveBeenNthCalledWith(
+      1,
+      'ibmcloud',
+      ['login', '-a', 'https://api.us-south.cf.cloud.ibm.com', '-u', 'apikey', '-p', 'cloud-api-key-foo', '-r', 'cf-region-foo'],
+      execOptions
+    );
+    expect(exec).toHaveBeenNthCalledWith(
+      2,
+      'ibmcloud',
+      ['target', '-o', 'cf-org-foo', '-s', 'cf-space-foo', '-g', 'cf-group-foo'],
       execOptions
     );
   });
@@ -54,28 +73,17 @@ describe('Installing IBM Cloud CLI', () => {
           'cf-org': 'cf-org-foo',
           'cf-space': 'cf-space-foo',
           'cf-region': 'cf-region-foo',
+          'cf-api': 'https://api.us-south.cf.cloud.ibm.com',
         }[name])
     );
     await login();
-    expect(exec).toHaveBeenCalledWith(
+    expect(exec).toHaveBeenNthCalledWith(
+      1,
       'ibmcloud',
-      [
-        'login',
-        '-a',
-        'https://cloud.ibm.com',
-        '-u',
-        'apikey',
-        '-p',
-        'cloud-api-key-foo',
-        '-o',
-        'cf-org-foo',
-        '-s',
-        'cf-space-foo',
-        '-r',
-        'cf-region-foo',
-      ],
+      ['login', '-a', 'https://api.us-south.cf.cloud.ibm.com', '-u', 'apikey', '-p', 'cloud-api-key-foo', '-r', 'cf-region-foo'],
       execOptions
     );
+    expect(exec).toHaveBeenNthCalledWith(2, 'ibmcloud', ['target', '-o', 'cf-org-foo', '-s', 'cf-space-foo'], execOptions);
   });
 
   it('handles error executing command', async () => {

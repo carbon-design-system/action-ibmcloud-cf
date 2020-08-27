@@ -1571,26 +1571,12 @@ async function login() {
     const cloudAPIKey = getInput('cloud-api-key');
     const org = getInput('cf-org');
     const space = getInput('cf-space');
+    const group = getInput('cf-group');
     const region = getInput('cf-region');
+    const api = getInput('cf-api');
     setSecret(cloudAPIKey);
-    await exec(
-      'ibmcloud',
-      [
-        'login',
-        '-a',
-        'https://cloud.ibm.com',
-        '-u',
-        'apikey',
-        '-p',
-        cloudAPIKey,
-        '-o',
-        org,
-        '-s',
-        space,
-        ...(!region ? [] : ['-r', region]),
-      ],
-      execOptions
-    );
+    await exec('ibmcloud', ['login', '-a', api, '-u', 'apikey', '-p', cloudAPIKey, '-r', region], execOptions);
+    await exec('ibmcloud', ['target', '-o', org, '-s', space, ...(!group ? [] : ['-g', group])], execOptions);
   } catch (error) {
     setFailed(`Logging into IBM Cloud failed: ${error.stack}`);
     throw error;
@@ -4666,7 +4652,7 @@ async function install() {
   try {
     const cliPath = await downloadTool('https://clis.cloud.ibm.com/install/linux');
     await exec('bash', [cliPath], execOptions);
-    await run('ibmcloud cf install', execOptions);
+    await run('ibmcloud cf install -v 6.51.0 --force', execOptions);
   } catch (error) {
     setFailed(`Error installing IBM Cloud CLI: ${error.stack}`);
     throw error;

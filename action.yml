@@ -10,9 +10,17 @@ inputs:
   cf-space:
     description: 'CloudFoundry space'
     required: true
+  cf-group:
+    description: 'Resource Group Name or ID'
+    required: false
+  cf-api:
+    description: 'CloudFoundry API endpoint'
+    required: false
+    default: 'https://api.us-south.cf.cloud.ibm.com'
   cf-region:
     description: 'CloudFoundry region'
     required: false
+    default: 'us-south'
   cf-app:
     description: 'CloudFoundry application name'
     required: true
