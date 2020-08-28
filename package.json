@@ -15,7 +15,8 @@
     "lint:scripts": "eslint --ext .js .",
     "lint:license:staged": "tools/check-license.js -w",
     "lint:scripts:staged": "eslint",
-    "test": "jest"
+    "test": "jest",
+    "stage-built": "git add dist/index.js dist/logout.js"
   },
   "license": "Apache-2",
   "dependencies": {
@@ -45,6 +46,7 @@
     "jest": "^26.1.0",
     "jest-circus": "^26.1.0",
     "lint-staged": "^10.2.0",
+    "pre-commit": "^1.2.0",
     "prettier": "^2.0.0",
     "through2": "^4.0.0"
   },
@@ -79,6 +81,7 @@
       "git add"
     ]
   },
+  "pre-commit": ["build", "stage-built"],
   "prettier": {
     "jsxBracketSameLine": true,
     "printWidth": 130,
