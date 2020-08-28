@@ -24,7 +24,7 @@ jobs:
           cf-space: cf-spac-name
           cf-group: default
           cf-region: us-south
-          cf-api: https://cloud.ibm.com
+          cf-api: https://api.us-south.cf.cloud.ibm.com
           cf-app: cf-app-name
           cf-manifest: manifest.yml
           deploy-dir: packages/my-awesome-package
