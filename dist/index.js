@@ -1575,8 +1575,16 @@ async function login() {
     const region = getInput('cf-region');
     const api = getInput('cf-api');
     setSecret(cloudAPIKey);
-    await exec('ibmcloud', ['login', '-a', api, '-u', 'apikey', '-p', cloudAPIKey, '-r', region], execOptions);
-    await exec('ibmcloud', ['target', '-o', org, '-s', space, ...(!group ? [] : ['-g', group])], execOptions);
+    await exec(
+      'ibmcloud',
+      ['login', '-a', 'https://cloud.ibm.com', '-u', 'apikey', '-p', cloudAPIKey, '-r', region],
+      execOptions
+    );
+    await exec(
+      'ibmcloud',
+      ['target', '-o', org, '-s', space, ...(!group ? [] : ['-g', group]), ...(!api ? [] : ['--cf-api', api])],
+      execOptions
+    );
   } catch (error) {
     setFailed(`Logging into IBM Cloud failed: ${error.stack}`);
     throw error;

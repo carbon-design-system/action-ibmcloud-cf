@@ -16,7 +16,6 @@ inputs:
   cf-api:
     description: 'CloudFoundry API endpoint'
     required: false
-    default: 'https://cloud.ibm.com'
   cf-region:
     description: 'CloudFoundry region'
     required: false
