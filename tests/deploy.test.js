@@ -20,45 +20,16 @@ describe('Deploying a CF app to IBM Cloud', () => {
   it('runs the right set of commands', async () => {
     getInput.mockImplementation((name) => ({ 'cf-app': 'cf-app-foo' }[name]));
     await deploy();
-    expect(exec).toHaveBeenNthCalledWith(
-      1,
-      'ibmcloud',
-      ['cf', 'add-plugin-repo', 'CF-Community', 'https://plugins.cloudfoundry.org'],
-      execOptions
-    );
-    expect(exec).toHaveBeenNthCalledWith(
-      2,
-      'ibmcloud',
-      ['cf', 'install-plugin', 'blue-green-deploy', '-f', '-r', 'CF-Community'],
-      execOptions
-    );
-    expect(exec).toHaveBeenNthCalledWith(
-      3,
-      'ibmcloud',
-      ['cf', 'blue-green-deploy', 'cf-app-foo', '--delete-old-apps'],
-      execOptions
-    );
+    expect(exec).toHaveBeenNthCalledWith(3, 'ibmcloud', ['cf', 'push', 'cf-app-foo', '--strategy', 'rolling'], execOptions);
   });
 
   it('runs the right set of commands with CF manifest specified', async () => {
     getInput.mockImplementation((name) => ({ 'cf-app': 'cf-app-foo', 'cf-manifest': 'cf-manifest-foo' }[name]));
     await deploy();
     expect(exec).toHaveBeenNthCalledWith(
-      1,
-      'ibmcloud',
-      ['cf', 'add-plugin-repo', 'CF-Community', 'https://plugins.cloudfoundry.org'],
-      execOptions
-    );
-    expect(exec).toHaveBeenNthCalledWith(
-      2,
-      'ibmcloud',
-      ['cf', 'install-plugin', 'blue-green-deploy', '-f', '-r', 'CF-Community'],
-      execOptions
-    );
-    expect(exec).toHaveBeenNthCalledWith(
       3,
       'ibmcloud',
-      ['cf', 'blue-green-deploy', 'cf-app-foo', '-f', 'cf-manifest-foo', '--delete-old-apps'],
+      ['cf', 'push', 'cf-app-foo', '-f', 'cf-manifest-foo', '--strategy', 'rolling'],
       execOptions
     );
   });
@@ -66,19 +37,7 @@ describe('Deploying a CF app to IBM Cloud', () => {
   it('runs the right set of commands with deploy directory specified', async () => {
     getInput.mockImplementation((name) => ({ 'cf-app': 'cf-app-foo', 'deploy-dir': 'deploy-dir-foo' }[name]));
     await deploy();
-    expect(exec).toHaveBeenNthCalledWith(
-      1,
-      'ibmcloud',
-      ['cf', 'add-plugin-repo', 'CF-Community', 'https://plugins.cloudfoundry.org'],
-      execOptions
-    );
-    expect(exec).toHaveBeenNthCalledWith(
-      2,
-      'ibmcloud',
-      ['cf', 'install-plugin', 'blue-green-deploy', '-f', '-r', 'CF-Community'],
-      execOptions
-    );
-    expect(exec).toHaveBeenNthCalledWith(3, 'ibmcloud', ['cf', 'blue-green-deploy', 'cf-app-foo', '--delete-old-apps'], {
+    expect(exec).toHaveBeenNthCalledWith(3, 'ibmcloud', ['cf', 'push', 'cf-app-foo', '--strategy', 'rolling'], {
       ...execOptions,
       cwd: 'deploy-dir-foo',
     });
