@@ -23,7 +23,7 @@ describe('Installing IBM Cloud CLI', () => {
     await install();
     expect(downloadTool).toHaveBeenCalledWith('https://clis.cloud.ibm.com/install/linux');
     expect(exec).toHaveBeenNthCalledWith(1, 'bash', ['/path/to/ibmcloud/cli'], execOptions);
-    expect(exec).toHaveBeenNthCalledWith(2, 'ibmcloud', ['cf', 'install', '-v', '6.51.0', '--force'], execOptions);
+    expect(exec).toHaveBeenNthCalledWith(2, 'ibmcloud', ['cf', 'install', '-v', '7.1.0', '--force'], execOptions);
   });
 
   it('handles error downloading IBM Cloud CLI', async () => {
